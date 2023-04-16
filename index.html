@@ -1,0 +1,155 @@
+<html>
+  <head>
+    <title>Lista de Compras</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        h1 {
+          margin: 20px 0;
+          text-align: center;
+        }
+        form {
+          margin: 20px auto;
+          max-width: 500px;
+        }
+        label {
+          display: inline-block;
+          margin-bottom: 10px;
+        }
+        input[type="text"], input[type="number"] {
+          display: block;
+          margin-bottom: 20px;
+          padding: 10px;
+          width: 100%;
+        }
+        button {
+          background-color: #007bff;
+          border: none;
+          color: #fff;
+          cursor: pointer;
+          padding: 10px;
+          width: 100%;
+        }
+        button:hover {
+          background-color: #0062cc;
+        }
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        li {
+          background-color: #f9f9f9;
+          border: 1px solid #ddd;
+          margin-bottom: 10px;
+          padding: 10px;
+        }
+        li:last-child {
+          margin-bottom: 0;
+        }
+        .delete-button {
+          background-color: #dc3545;
+          color: #fff;
+          margin-left: 10px;
+          padding: 5px 10px;
+        }
+        .delete-button:hover {
+          background-color: #c82333;
+        }
+
+        .share-button{
+            background-color: green;
+        }
+        .clear-button{
+            background-color: #c82333;
+        }
+      </style>
+  </head>
+  <body>
+    <h1>Lista de Compras</h1>
+    <label>Nome do produto:</label>
+    <input type="text" id="taskName"><br>
+    <label>Quantidade:</label>
+    <input type="number" id="taskQuantity"><br>
+    <label>Valor:</label>
+    <input type="number" id="taskValue"><br>
+    <button onclick="addTask()">Adicionar Produto</button>
+    <br><br>
+    <button type="button" class="clear-button" onclick="clearFields()">Limpar Campos</button>
+    </form>
+    <br><br>
+    <button type="button" class="share-button" onclick="shareTaskList()">Compartilhar no WhatsApp</button>
+
+    <ul id="taskList"></ul>
+    <div id="total"></div>
+    <script>
+      var tasks = [];
+
+function addTask() {
+  var name = document.getElementById("taskName").value;
+  var quantity = document.getElementById("taskQuantity").value;
+  var value = document.getElementById("taskValue").value;
+  tasks.push({name: name, quantity: quantity, value: value});
+  updateTaskList();
+  updateTotal();
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  updateTaskList();
+  updateTotal();
+}
+
+function updateTotal() {
+        var total = 0;
+        for (var i = 0; i < tasks.length; i++) {
+          var task = tasks[i];
+          total += task.value * task.quantity;
+        }
+        document.getElementById("total").innerHTML = "Total: R$" + total.toFixed(2);
+      }
+
+function clearFields() {
+  document.getElementById("taskName").value = "";
+  document.getElementById("taskQuantity").value = "";
+  document.getElementById("taskValue").value = "";
+}
+
+function shareTaskList() {
+  var message = "Lista de Tarefas:\n";
+  for (var i = 0; i < tasks.length; i++) {
+    var task = tasks[i];
+    message += "- " + task.name + ": " + task.quantity + " (R$" + task.value + ")\n";
+  }
+  message += "\nTotal: R$" + getTotalValue();
+  var whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+  window.open(whatsappUrl);
+}
+
+function getTotalValue() {
+  var total = 0;
+  for (var i = 0; i < tasks.length; i++) {
+    var task = tasks[i];
+    total += parseFloat(task.quantity) * parseFloat(task.value);
+  }
+  return total.toFixed(2);
+}
+
+function updateTaskList() {
+  var taskList = document.getElementById("taskList");
+  taskList.innerHTML = "";
+  for (var i = 0; i < tasks.length; i++) {
+    var task = tasks[i];
+    var li = document.createElement("li");
+    li.innerHTML = task.name + " - Quantidade: " + task.quantity + ", Valor: R$" + task.value + "<button class='delete-button' onclick='deleteTask(" + i + ")'>Excluir</button>";
+    taskList.appendChild(li);
+  }
+}
+
+
+    </script>
+  </body>
+</html>
