@@ -133,7 +133,7 @@ function shareTaskList() {
   var message = "Lista de Compras:\n";
   for (var i = 0; i < tasks.length; i++) {
     var task = tasks[i];
-    message += "- " + task.name + ": " + task.quantity + " (R$" + task.value + ")\n";
+    message += "- " + task.name + ": " + ("Quantidade: "+task.quantity) + " (R$" + task.value + ")\n";
   }
   message += "\nTotal: R$" + getTotalValue();
   var whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
